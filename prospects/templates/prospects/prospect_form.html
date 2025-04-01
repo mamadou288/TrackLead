@@ -1,0 +1,21 @@
+{% extends 'core/base.html' %}
+
+{% block title %}
+    {% if update %}Modifier le prospect{% else %}Ajouter un prospect{% endif %}
+{% endblock %}
+
+{% block content %}
+<h2>
+    {% if update %}Modifier le prospect{% else %}Ajouter un prospect{% endif %}
+</h2>
+
+<form method="post">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit">
+        {% if update %}Enregistrer les modifications{% else %}Créer{% endif %}
+    </button>
+</form>
+
+<a href="{% url 'prospect-list' %}">Retour à la liste</a>
+{% endblock %}

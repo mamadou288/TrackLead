@@ -1,0 +1,11 @@
+<nav style="background-color: #f8f8f8; padding: 10px;">
+    <a href="{% url 'home' %}">🏠 Accueil</a>
+
+    {% if user.is_authenticated %}
+        | <a href="{% url 'prospect-list' %}">📋 Mes prospects</a>
+        | <a href="{% url 'logout' %}">🚪 Déconnexion</a>
+    {% else %}
+        | <a href="{% url 'login' %}">🔐 Connexion</a>
+        | <a href="{% url 'register' %}">📝 Inscription</a>
+    {% endif %}
+</nav>

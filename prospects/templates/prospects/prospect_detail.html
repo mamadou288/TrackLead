@@ -1,0 +1,24 @@
+{% extends 'core/base.html' %}
+
+{% block title %}Détails du prospect{% endblock %}
+
+{% block content %}
+<div class="prospect-detail">
+    <h1>Détails du prospect</h1>
+    
+    <div class="prospect-info">
+        <p><strong>Nom:</strong> {{ prospect.name }}</p>
+        <p><strong>Email:</strong> {{ prospect.email }}</p>
+        <p><strong>Téléphone:</strong> {{ prospect.phone }}</p>
+        <p><strong>Entreprise:</strong> {{ prospect.company }}</p>
+        <p><strong>Statut:</strong> {{ prospect.status }}</p>
+        <p><strong>Notes:</strong> {{ prospect.notes }}</p>
+    </div>
+
+    <div class="actions">
+        <a href="{% url 'prospect-update' prospect.pk %}" class="btn btn-primary">Modifier</a>
+        <a href="{% url 'prospect-delete' prospect.pk %}" class="btn btn-danger" onclick="return confirm('Êtes-vous sûr de vouloir supprimer ce prospect ?')">Supprimer</a>
+        <a href="{% url 'prospect-list' %}" class="btn btn-secondary">Retour à la liste</a>
+    </div>
+</div>
+{% endblock %} 
