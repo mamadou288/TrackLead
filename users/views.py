@@ -1,8 +1,9 @@
 from django.shortcuts import render, redirect
 from .forms import CustomUserCreationForm
-from django.contrib.auth import authenticate, login
+from django.contrib.auth import authenticate, login, logout
 from django.contrib import messages
 from django.contrib.auth.forms import AuthenticationForm
+from django.contrib.auth.decorators import login_required
 # Create your views here.
 
 def register(request):
@@ -30,3 +31,9 @@ def custom_login_view(request):
     else:
         form = AuthenticationForm()
     return render(request, "users/login.html", {'form': form})
+
+@login_required
+def custom_logout_view(request):
+    logout(request)
+    messages.success(request, "Vous avez été déconnecté avec succès.")
+    return redirect('login')

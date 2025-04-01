@@ -1,0 +1,61 @@
+/* Custom styles */
+
+/* Navbar customization */
+.navbar {
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.navbar-brand {
+    font-weight: bold;
+    color: #2c3e50 !important;
+}
+
+/* Card customization */
+.card {
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    border: none;
+}
+
+.card-header {
+    background-color: #f8f9fa;
+    border-bottom: none;
+}
+
+/* Form customization */
+.form-control:focus {
+    border-color: #2c3e50;
+    box-shadow: 0 0 0 0.2rem rgba(44, 62, 80, 0.25);
+}
+
+.btn-primary {
+    background-color: #2c3e50;
+    border-color: #2c3e50;
+}
+
+.btn-primary:hover {
+    background-color: #34495e;
+    border-color: #34495e;
+}
+
+/* Alert customization */
+.alert {
+    border: none;
+    border-radius: 4px;
+}
+
+/* Main content spacing */
+main.container {
+    padding-top: 2rem;
+    padding-bottom: 2rem;
+}
+
+/* Links */
+a {
+    color: #2c3e50;
+    text-decoration: none;
+}
+
+a:hover {
+    color: #34495e;
+    text-decoration: underline;
+} 

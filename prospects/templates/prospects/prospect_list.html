@@ -1,0 +1,35 @@
+{% extends 'core/base.html' %}
+
+{% block title %}Mes prospects{% endblock %}
+
+{% block content %}
+<h2>Liste de mes prospects</h2>
+
+<!-- Bouton "Ajouter un prospect" -->
+<p>
+    <a href="{% url 'prospect-create' %}" style="padding: 8px 12px; background-color: #4CAF50; color: white; text-decoration: none; border-radius: 4px;">
+        ➕ Ajouter un prospect
+    </a>
+</p>
+
+{% if prospects %}
+    <ul>
+        {% for prospect in prospects %}
+        <li>
+            <a href="{% url 'prospect-detail' prospect.pk %}">
+                {{ prospect.first_name }} {{ prospect.last_name }} – {{ prospect.company }}
+            </a>
+
+            <!-- Bouton "Supprimer" -->
+            <a href="{% url 'prospect-delete' prospect.pk %}"
+               onclick="return confirm('Supprimer ce prospect ?');"
+               style="color: red; margin-left: 10px;">
+                🗑️ Supprimer
+            </a>
+        </li>
+        {% endfor %}
+    </ul>
+{% else %}
+    <p>Aucun prospect enregistré.</p>
+{% endif %}
+{% endblock %}
