@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}TrackLead{% endblock %}</title>
+
+</head>
+<body>
+    <header>
+        <h1>TrackLead</h1>
+        <nav>
+            <a href="{% url 'home' %}">Accueil</a>
+            {% if user.is_authenticated %}
+                
+                {% comment %}
+                <a href="/prospects/">Prospects</a>
+                <a href="{% url 'logout' %}">Déconnexion</a>
+                {% endcomment %}
+                    
+            {% else %}
+                <a href="{% url 'login' %}">Connexion</a>
+                <a href="{% url 'register' %}">Inscription</a>
+            {% endif %}
+        </nav>
+    </header>
+
+    <main>
+        {% block content %}{% endblock %}
+    </main>
+    
+</body>
+</html>

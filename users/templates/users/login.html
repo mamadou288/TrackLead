@@ -1,16 +1,22 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Connectez-vous à votre compte</title>
-</head>
-<body>
+{% extends 'core/base.html' %}
+
+{% block title %}Connexion{% endblock %}
+
+{% block content %}
+<div class="login-container">
     <h1>Connectez-vous à votre compte</h1>
+    {% if messages %}
+        {% for message in messages %}
+            <div class="alert alert-{{ message.tags }}">
+                {{ message }}
+            </div>
+        {% endfor %}
+    {% endif %}
     <form method="post">
         {% csrf_token %}
         {{ form.as_p }}
-        <button type="submit">Connexion</button>
+        <button type="submit" class="btn btn-primary">Connexion</button>
     </form>
-</body>
-</html>
+    <p>Pas encore de compte ? <a href="{% url 'register' %}">Inscrivez-vous</a></p>
+</div>
+{% endblock %}

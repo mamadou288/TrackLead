@@ -2,6 +2,7 @@ from django.shortcuts import render, redirect
 from .forms import CustomUserCreationForm
 from django.contrib.auth import authenticate, login
 from django.contrib import messages
+from django.contrib.auth.forms import AuthenticationForm
 # Create your views here.
 
 def register(request):
@@ -17,16 +18,15 @@ def register(request):
 
 def custom_login_view(request):
     if request.method == "POST":
-        username = request.POST.get("username")
-        password = request.POST.get("password")
-
-        user = authenticate(request, username=username, password=password)
-
-        if user is not None:
-            login(request, user)
-            messages.success(request, f"Bienvenue {user.username} !")
-            return redirect('/prospects/')  # Redirection vers la liste des prospects
-        else:
-            messages.error(request, "Nom d'utilisateur ou mot de passe invalide.")
-
-    return render(request, "users/login.html")
+        form = AuthenticationForm(request, data=request.POST)
+        if form.is_valid():
+            username = form.cleaned_data.get('username')
+            password = form.cleaned_data.get('password')
+            user = authenticate(username=username, password=password)
+            if user is not None:
+                login(request, user)
+                messages.success(request, f"Bienvenue {user.username} !")
+                return redirect('/prospects/')  # Redirection vers la liste des prospects
+    else:
+        form = AuthenticationForm()
+    return render(request, "users/login.html", {'form': form})
