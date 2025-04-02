@@ -1,0 +1,205 @@
+{% extends 'core/base.html' %}
+{% load static %}
+
+{% block title %}Mon Dashboard{% endblock %}
+
+{% block content %}
+<div class="container py-4">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <div>
+            <h1 class="h2 mb-0">Mon Dashboard</h1>
+            <p class="text-muted">Vue d'ensemble de votre activité commerciale</p>
+        </div>
+        <div>
+            <a href="{% url 'prospect-list' %}" class="btn btn-outline-primary me-2">
+                <i class="fas fa-users"></i> Mes Prospects
+            </a>
+            <a href="{% url 'opportunity-list' %}" class="btn btn-primary">
+                <i class="fas fa-chart-line"></i> Mes Opportunités
+            </a>
+        </div>
+    </div>
+
+    <!-- Hidden inputs for chart data -->
+    <input type="hidden" id="nb-won" value="{{ nb_won }}">
+    <input type="hidden" id="nb-in-progress" value="{{ nb_opportunities|add:'-nb_won'|add:'-nb_lost' }}">
+    <input type="hidden" id="nb-lost" value="{{ nb_lost|default:0 }}">
+    <input type="hidden" id="monthly-revenue" value="{{ monthly_revenue|safe }}">
+
+    <!-- Stats Cards -->
+    <div class="row mb-4">
+        <div class="col-md-3 mb-3">
+            <div class="card bg-primary text-white h-100 shadow-sm">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <div>
+                            <h6 class="card-title mb-0">Prospects</h6>
+                            <h2 class="mt-2 mb-0">{{ nb_prospects }}</h2>
+                        </div>
+                        <div class="fs-1">
+                            <i class="fas fa-users"></i>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-footer bg-primary-dark py-2">
+                    <a href="{% url 'prospect-list' %}" class="text-white text-decoration-none">
+                        Voir tous mes prospects <i class="fas fa-arrow-right ms-1"></i>
+                    </a>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3 mb-3">
+            <div class="card bg-success text-white h-100 shadow-sm">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <div>
+                            <h6 class="card-title mb-0">Opportunités</h6>
+                            <h2 class="mt-2 mb-0">{{ nb_opportunities }}</h2>
+                        </div>
+                        <div class="fs-1">
+                            <i class="fas fa-briefcase"></i>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-footer bg-success-dark py-2">
+                    <a href="{% url 'opportunity-list' %}" class="text-white text-decoration-none">
+                        Voir toutes mes opportunités <i class="fas fa-arrow-right ms-1"></i>
+                    </a>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3 mb-3">
+            <div class="card bg-info text-white h-100 shadow-sm">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <div>
+                            <h6 class="card-title mb-0">Gagnées</h6>
+                            <h2 class="mt-2 mb-0">{{ nb_won }}</h2>
+                        </div>
+                        <div class="fs-1">
+                            <i class="fas fa-trophy"></i>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-footer bg-info-dark py-2">
+                    <span class="text-white">
+                        Taux de conversion: {{ taux_conversion }}%
+                    </span>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3 mb-3">
+            <div class="card bg-warning text-white h-100 shadow-sm">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <div>
+                            <h6 class="card-title mb-0">Revenus</h6>
+                            <h2 class="mt-2 mb-0">{{ total_revenue }} €</h2>
+                        </div>
+                        <div class="fs-1">
+                            <i class="fas fa-euro-sign"></i>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-footer bg-warning-dark py-2">
+                    <span class="text-white">
+                        <i class="fas fa-chart-line me-1"></i> Total des opportunités gagnées
+                    </span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Charts Section -->
+    <div class="row mb-4">
+        <div class="col-md-6 mb-3">
+            <div class="card shadow-sm h-100">
+                <div class="card-header bg-white">
+                    <h5 class="card-title mb-0">Répartition des opportunités</h5>
+                </div>
+                <div class="card-body">
+                    <div class="chart-container" style="position: relative; height: 250px;">
+                        <canvas id="opportunitiesChart"></canvas>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6 mb-3">
+            <div class="card shadow-sm h-100">
+                <div class="card-header bg-white">
+                    <h5 class="card-title mb-0">Évolution des revenus</h5>
+                </div>
+                <div class="card-body">
+                    <div class="chart-container" style="position: relative; height: 250px;">
+                        <canvas id="revenueChart"></canvas>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Recent Activity -->
+    <div class="row">
+        <div class="col-md-6 mb-3">
+            <div class="card shadow-sm h-100">
+                <div class="card-header bg-white d-flex justify-content-between align-items-center">
+                    <h5 class="card-title mb-0">Derniers prospects</h5>
+                    <a href="{% url 'prospect-list' %}" class="btn btn-sm btn-outline-primary">Voir tout</a>
+                </div>
+                <div class="card-body p-0">
+                    <div class="list-group list-group-flush">
+                        {% for prospect in recent_prospects %}
+                        <a href="{% url 'prospect-detail' prospect.pk %}" class="list-group-item list-group-item-action">
+                            <div class="d-flex w-100 justify-content-between">
+                                <h6 class="mb-1">{{ prospect.first_name }} {{ prospect.last_name }}</h6>
+                                <small class="text-muted">{{ prospect.created_at|date:"d/m/Y" }}</small>
+                            </div>
+                            <p class="mb-1 text-muted">{{ prospect.company }}</p>
+                        </a>
+                        {% empty %}
+                        <div class="list-group-item text-center py-4">
+                            <p class="text-muted mb-0">Aucun prospect récent</p>
+                        </div>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6 mb-3">
+            <div class="card shadow-sm h-100">
+                <div class="card-header bg-white d-flex justify-content-between align-items-center">
+                    <h5 class="card-title mb-0">Dernières opportunités</h5>
+                    <a href="{% url 'opportunity-list' %}" class="btn btn-sm btn-outline-primary">Voir tout</a>
+                </div>
+                <div class="card-body p-0">
+                    <div class="list-group list-group-flush">
+                        {% for opportunity in recent_opportunities %}
+                        <a href="{% url 'opportunity-detail' opportunity.pk %}" class="list-group-item list-group-item-action">
+                            <div class="d-flex w-100 justify-content-between">
+                                <h6 class="mb-1">{{ opportunity.name }}</h6>
+                                <small class="text-muted">{{ opportunity.created_at|date:"d/m/Y" }}</small>
+                            </div>
+                            <p class="mb-1">
+                                <span class="badge {% if opportunity.statut == 'won' %}bg-success{% elif opportunity.statut == 'lost' %}bg-danger{% elif opportunity.statut == 'in_progress' %}bg-info{% else %}bg-secondary{% endif %}">
+                                    {{ opportunity.get_statut_display }}
+                                </span>
+                                <span class="ms-2">{{ opportunity.montant_estime }} €</span>
+                            </p>
+                        </a>
+                        {% empty %}
+                        <div class="list-group-item text-center py-4">
+                            <p class="text-muted mb-0">Aucune opportunité récente</p>
+                        </div>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Chart.js for visualizations -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script src="{% static 'js/dashboard.js' %}"></script>
+<link rel="stylesheet" href="{% static 'css/dashboard.css' %}">
+{% endblock %}

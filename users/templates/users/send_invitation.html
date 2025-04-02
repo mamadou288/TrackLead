@@ -1,13 +1,13 @@
 {% extends 'core/base.html' %}
 
-{% block title %}Connexion{% endblock %}
+{% block title %}Envoyer une invitation{% endblock %}
 
 {% block content %}
 <div class="row justify-content-center">
     <div class="col-md-6">
         <div class="card">
             <div class="card-header">
-                <h2 class="text-center">Connectez-vous à votre compte</h2>
+                <h2 class="text-center">Inviter un utilisateur</h2>
             </div>
             <div class="card-body">
                 {% if messages %}
@@ -17,6 +17,7 @@
                         </div>
                     {% endfor %}
                 {% endif %}
+                
                 <form method="post">
                     {% csrf_token %}
                     {% for field in form %}
@@ -28,15 +29,18 @@
                                     {{ field.errors }}
                                 </div>
                             {% endif %}
+                            {% if field.help_text %}
+                                <div class="form-text text-muted">
+                                    {{ field.help_text }}
+                                </div>
+                            {% endif %}
                         </div>
                     {% endfor %}
-                    <div class="d-grid">
-                        <button type="submit" class="btn btn-primary">Connexion</button>
+                    <div class="d-grid gap-2">
+                        <button type="submit" class="btn btn-primary">Envoyer l'invitation</button>
+                        <a href="{% url 'home' %}" class="btn btn-secondary">Retour</a>
                     </div>
                 </form>
-                <div class="text-center mt-3">
-                    <span class="nav-link text-muted">📝 Inscription sur invitation</span>
-                </div>
             </div>
         </div>
     </div>

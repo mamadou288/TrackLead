@@ -1,13 +1,13 @@
 {% extends 'core/base.html' %}
 
-{% block title %}Inscription{% endblock %}
+{% block title %}Modifier mon profil{% endblock %}
 
 {% block content %}
 <div class="row justify-content-center">
     <div class="col-md-6">
         <div class="card">
             <div class="card-header">
-                <h2 class="text-center">Créez votre compte</h2>
+                <h2 class="text-center">Modifier mon profil</h2>
             </div>
             <div class="card-body">
                 {% if messages %}
@@ -17,6 +17,7 @@
                         </div>
                     {% endfor %}
                 {% endif %}
+                
                 <form method="post">
                     {% csrf_token %}
                     {% for field in form %}
@@ -35,13 +36,11 @@
                             {% endif %}
                         </div>
                     {% endfor %}
-                    <div class="d-grid">
-                        <button type="submit" class="btn btn-primary">S'inscrire</button>
+                    <div class="d-grid gap-2">
+                        <button type="submit" class="btn btn-primary">Enregistrer</button>
+                        <a href="{% url 'profile' %}" class="btn btn-secondary">← Retour au profil</a>
                     </div>
                 </form>
-                <div class="text-center mt-3">
-                    <p>Déjà un compte ? <a href="{% url 'login' %}">Connectez-vous</a></p>
-                </div>
             </div>
         </div>
     </div>
