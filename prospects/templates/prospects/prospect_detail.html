@@ -3,22 +3,79 @@
 {% block title %}Détails du prospect{% endblock %}
 
 {% block content %}
-<div class="prospect-detail">
-    <h1>Détails du prospect</h1>
-    
-    <div class="prospect-info">
-        <p><strong>Nom:</strong> {{ prospect.name }}</p>
-        <p><strong>Email:</strong> {{ prospect.email }}</p>
-        <p><strong>Téléphone:</strong> {{ prospect.phone }}</p>
-        <p><strong>Entreprise:</strong> {{ prospect.company }}</p>
-        <p><strong>Statut:</strong> {{ prospect.status }}</p>
-        <p><strong>Notes:</strong> {{ prospect.notes }}</p>
-    </div>
+<div class="container py-4">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card shadow">
+                <div class="card-header bg-primary text-white d-flex justify-content-between align-items-center">
+                    <h1 class="h3 mb-0">Détails du prospect</h1>
+                    <div class="btn-group">
+                        <a href="{% url 'prospect-update' prospect.pk %}" class="btn btn-light btn-sm">
+                            <i class="fas fa-edit"></i> Modifier
+                        </a>
+                        <a href="{% url 'prospect-delete' prospect.pk %}" class="btn btn-light btn-sm" 
+                           onclick="return confirm('Êtes-vous sûr de vouloir supprimer ce prospect ?')">
+                            <i class="fas fa-trash"></i> Supprimer
+                        </a>
+                    </div>
+                </div>
+                
+                <div class="card-body">
+                    <div class="row mb-4">
+                        <div class="col-md-6">
+                            <h5 class="text-muted mb-3">Informations de contact</h5>
+                            <dl class="row">
+                                <dt class="col-sm-4">Nom</dt>
+                                <dd class="col-sm-8">{{ prospect.name }}</dd>
+                                
+                                <dt class="col-sm-4">Email</dt>
+                                <dd class="col-sm-8">
+                                    <a href="mailto:{{ prospect.email }}" class="text-decoration-none">
+                                        {{ prospect.email }}
+                                    </a>
+                                </dd>
+                                
+                                <dt class="col-sm-4">Téléphone</dt>
+                                <dd class="col-sm-8">
+                                    <a href="tel:{{ prospect.phone }}" class="text-decoration-none">
+                                        {{ prospect.phone }}
+                                    </a>
+                                </dd>
+                            </dl>
+                        </div>
+                        
+                        <div class="col-md-6">
+                            <h5 class="text-muted mb-3">Informations professionnelles</h5>
+                            <dl class="row">
+                                <dt class="col-sm-4">Entreprise</dt>
+                                <dd class="col-sm-8">{{ prospect.company }}</dd>
+                                
+                                <dt class="col-sm-4">Statut</dt>
+                                <dd class="col-sm-8">
+                                    <span class="badge bg-info">{{ prospect.status }}</span>
+                                </dd>
+                            </dl>
+                        </div>
+                    </div>
 
-    <div class="actions">
-        <a href="{% url 'prospect-update' prospect.pk %}" class="btn btn-primary">Modifier</a>
-        <a href="{% url 'prospect-delete' prospect.pk %}" class="btn btn-danger" onclick="return confirm('Êtes-vous sûr de vouloir supprimer ce prospect ?')">Supprimer</a>
-        <a href="{% url 'prospect-list' %}" class="btn btn-secondary">Retour à la liste</a>
+                    <div class="mb-4">
+                        <h5 class="text-muted mb-3">Notes</h5>
+                        <div class="p-3 bg-light rounded">
+                            {{ prospect.notes|linebreaks }}
+                        </div>
+                    </div>
+
+                    <div class="d-flex justify-content-between align-items-center">
+                        <a href="{% url 'prospect-list' %}" class="btn btn-secondary">
+                            <i class="fas fa-arrow-left"></i> Retour à la liste
+                        </a>
+                        <a href="{% url 'add-opportunity' prospect.pk %}" class="btn btn-success">
+                            <i class="fas fa-plus"></i> Ajouter une opportunité
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 </div>
 {% endblock %} 

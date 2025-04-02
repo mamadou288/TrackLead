@@ -25,7 +25,13 @@
                         </li>
                         {% if user.is_authenticated %}
                             <li class="nav-item">
+                                <a class="nav-link" href="{% url 'dashboard' %}">📊 Dashboard</a>
+                            </li>
+                            <li class="nav-item">
                                 <a class="nav-link" href="{% url 'prospect-list' %}">📋 Mes prospects</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="{% url 'opportunity-list' %}">💰 Mes opportunités</a>
                             </li>
                             <li class="nav-item">
                                 <a class="nav-link" href="{% url 'profile' %}">👤 Mon profil</a>
