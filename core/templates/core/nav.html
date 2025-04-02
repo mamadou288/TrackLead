@@ -4,8 +4,11 @@
     {% if user.is_authenticated %}
         | <a href="{% url 'prospect-list' %}">📋 Mes prospects</a>
         | <a href="{% url 'logout' %}">🚪 Déconnexion</a>
+        | <a href="{% url 'profile' %}">👤 Mon profil</a>
     {% else %}
         | <a href="{% url 'login' %}">🔐 Connexion</a>
-        | <a href="{% url 'register' %}">📝 Inscription</a>
+        | <!-- Lien vers une page "invitation requise" si tu veux -->
+        <span style="color: gray;">Inscription sur invitation uniquement</span>
+        
     {% endif %}
 </nav>
